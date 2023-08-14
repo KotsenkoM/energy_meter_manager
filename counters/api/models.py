@@ -2,17 +2,16 @@ from django.db import models
 
 
 class EnergyMeasurements(models.Model):
-    number = models.CharField(
+    number = models.IntegerField(
         'Номер счетчика',
-        max_length=24,
-        primary_key=True
+        max_length=24
     )
-    amps = models.CharField(
+    amps = models.FloatField(
         'Текущий ток (кол-во Ампер)',
         blank=True,
         null=True
     )
-    kilowatt = models.CharField(
+    kilowatt = models.FloatField(
         'Потребление энергии',
         blank=True,
         null=True
@@ -23,22 +22,17 @@ class EnergyMeasurements(models.Model):
     )
 
     class Meta:
-        verbose_name = 'счетчик'
-        verbose_name_plural = 'счетчики'
+        verbose_name = 'показание'
+        verbose_name_plural = 'показания'
 
 
 class EnergyMeter(models.Model):
-    number = models.ForeignKey(
-        EnergyMeasurements,
-        on_delete=models.CASCADE
+    number = models.IntegerField(
+        'Номер счетчика',
+        max_length=24,
+        unique=True
     )
-    amps = models.CharField(
-        'Текущий ток (кол-во Ампер)',
-        blank=True,
-        null=True
-    )
-    kilowatt = models.CharField(
-        'Потребление энергии',
-        blank=True,
-        null=True
-    )
+
+    class Meta:
+        verbose_name = 'счетчик'
+        verbose_name_plural = 'счетчики'
