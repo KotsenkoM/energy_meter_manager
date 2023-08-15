@@ -9,16 +9,16 @@ from .serializers import EnergyMeterSerializer, EnergyMeasurementsSerializer
 class EnergyMeterViewSet(viewsets.ViewSet):
     def create(self, request) -> Response:
         """
-        Создает новый счетчик энергии.
+        Создает новый прибор учета в базе данных.
 
         :param request: Данные запроса.
-        :return: Ответ с данными созданного счетчика.
+        :return: Ответ с данными созданного прибора учета.
         """
         serializer = EnergyMeterSerializer(data=request.data)
         if serializer.is_valid():
             number = serializer.validated_data['number']
             if EnergyMeter.objects.filter(number=number).exists():
-                return Response({'error': 'Счетчик с таким номером уже существует.'},
+                return Response({'error': 'Прибор учета с таким номером уже существует.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
@@ -27,10 +27,10 @@ class EnergyMeterViewSet(viewsets.ViewSet):
 
     def delete(self, request, pk=None) -> Response:
         """
-        Удаляет счетчик энергии.
+        Удаляет прибор учета.
 
         :param request: Данные запроса.
-        :param pk: Первичный ключ счетчика.
+        :param pk: Первичный ключ прибора учета.
         :return: Ответ об успешном удалении или ошибке.
         """
         try:
@@ -42,11 +42,11 @@ class EnergyMeterViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None) -> Response:
         """
-        Возвращает информацию о счетчике.
+        Возвращает информацию о приборе учета.
 
         :param request: Данные запроса.
-        :param pk: Первичный ключ счетчика.
-        :return: Ответ с данными о счетчике и его текущем измерении.
+        :param pk: Первичный ключ прибора учета.
+        :return: Ответ с данными о приборе учета и его текущем измерении.
         """
         try:
             energy_meter = EnergyMeter.objects.get(pk=pk)
@@ -70,10 +70,10 @@ class EnergyMeterViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['GET'])
     def statistics(self, request, pk=None) -> Response:
         """
-        Возвращает статистику измерений для счетчика в заданном диапазоне дат.
+        Возвращает статистику измерений для прибора учета в заданном диапазоне дат.
 
         :param request: Данные запроса.
-        :param pk: Первичный ключ счетчика.
+        :param pk: Первичный ключ прибора учета.
         :return: Ответ с данными статистики измерений.
         """
         try:
